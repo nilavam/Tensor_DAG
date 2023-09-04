@@ -1,0 +1,128 @@
+\input{pre.tex}
+\renewcommand\intercal{{\cramped{{}^\mathsf{T}}}}
+%\fontfamily{qcr}\selectfont 
+%\usepackage[backend=bibtex]{biblatex}
+\setcounter{tocdepth}{3}
+\usepackage{etoolbox}
+
+\title{Tensor normal models on Directed acyclic graphs}
+
+%\author{Nilava Metya}
+\date{}
+
+\begin{document}
+
+
+
+
+\begin{abstract}
+Abstract here.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+
+
+Maximum Likelihood Estimation (MLE) is a fundamental problem in statistics, and recently it has been studied from the lens of algebra. The MLE problem is to find a point in a model that `best' fits some data. The idea of `fitting' a data is given by a \emph{likelihood function}, and the problem of finding a point that `best' fits the data translates to \emph{maximizing} the likelihood function. A point that maximizes the likelihood function is called the \emph{maximum likelihood estimate}.
+
+Throughout we will use the calligraphic font $\cG$ to denote a directed acyclic graph (DAG) and the normal font $G$ to denote a group. $\cM$, with some subscript containing an object, will be used to denote a model. For example, $\cM_G$ is the model associated to a group $G$. $\PD_m$ will refer to the cone of symmetric $m\times m$ positive definite matrices.
+
+
+\section{Main Results}
+
+
+The main paper \cite{mainpaper} deals mainly about Gaussian group models and section $5$ talks about certain DAG models and their relationship with Gaussian group models. Anna Seigal suggested to deal with the model $\cM(\cG_1,\cG_2)\sett \set{\Psi_1\otimes \Psi_2: \Psi_i\in \cM_{\cG_i}}$ when two DAGs $\cG_1,\cG_2$ are given, and raised the primary question that when are such models Gaussian group models, that is, when is $\cM(\cG_1,\cG_2) = \cM_G$ for some group $G$ of matrices. For the one-parameter case, such models have been studied. Given a DAG $\cG$, one considers the set of matrices $$G\left(\cG\right) =  \set{X\in GL_{\abs{V(\cG)}}: X_{ij} = 0 \text{ for } i\neq j \text{ with } j\not \to i \text{ in }\cG}.$$
+This is relevant in the `good' case when $\cM_\cG = \cM_{G\left(\cG\right)}$ as indicated in \cref{tdag_thm}. 
+
+The problem on $\cM(\cG_1,\cG_2)$ naturally starts by considering $$G\left(\cG_1,\cG_2\right) \sett \set{\Psi_1\otimes\Psi_2: \Psi_i\in G\left(\cG_i\right)} = G\left(\cG_1\right)\otimes G\left(\cG_2\right).$$ It can be directly proven that 
+\begin{prop}
+$G(\cG_1,\cG_2)$ is a group iff both $\cG_i$ are TDAGs. If both $\cG_i$'s are TDAGs, the model $M = \set{\Psi_1\otimes\Psi_2: \Psi_i\in \cM_{\cG_i}}$  is exactly $\cM_{G\left(\cG_1,\cG_2\right)}$.
+\end{prop}
+
+My main contribution is to define a construction $\cG_1\otimes \cG_2$ such that $G\left(\cG_1\right)\otimes G\left(\cG_2\right) \cong G\left(\cG_1\otimes \cG_2\right)$. In fact such a construction is commutative (upto relabelling) and associative. Thus it extends to $\cG_1\otimes\cdots\otimes \cG_n$ so that $\displaystyle \bigotimes_{i=1}^nG\left(\cG_i\right) \cong  G\left(\bigotimes_{i=1}^n\cG_i\right)$. That is, this construction extends to the tensor normal models on $n$ DAGs.
+
+
+\section{Background}
+
+\subsection{Maximum likelihood estimation}
+
+We will focus on multivariate Gaussian distributions of mean zero and covariance matrix $\Sigma$, whose density is given by $$f_{\Sigma}(\pmb y) = \frac{1}{\sqrt{\det(2\pi \Sigma)}} \exp\left(-\frac{1}{2}\pmb y^\intercal\Sigma^{-1}\pmb y\right)$$
+where $\pmb y\in \R^m$ and $\Sigma \in \PD_m$.
+The corresponding $\Psi = \Sigma^{-1}$ will be its \emph{concentration matrix}. A \emph{Gaussian model} is a set of $m-$dimensional Gaussian distributions with mean zero. Such a model is given by a set of $m\times m$ symmetric positive definite covariance matrices. Equivalently they are also determined by a set of concentration matrices in $\PD_m$. We will refer to this as the Gaussian model, instead of the set of densities themselves. So a Gaussian model $\cM$ is just a subset of $\PD_m$ whose elements are to be thought of as concentration matrices.
+
+A maximum likelihood estimate is a point $\Psi$ in the model which maximizes the likelihood of observing some sample data point $\vec {\pmb Y} = (\pmb y_1,\cdots, \pmb y_n)$. Mathematically, we want a $\Psi\in \cM$ that maximizes the likelihood function $\displaystyle L_{\vec {\pmb Y}}(\Psi) = \prod_{i=1}^n f_{\Psi^{-1}}(\pmb y_i)$. Often, it is easier to maximize $l_{\vec {\pmb Y}} \sett \log L_{\vec {\pmb Y}}$ instead of $L_{\vec {\pmb Y}}$ itself, and they have the same maximizers. Note that
+\begin{align*}
+l_{\vec {\pmb Y}}(\Psi) &= \log L_{\vec {\pmb Y}}(\Psi)\\
+&= \sum_{i=1}^n \left(-\frac{1}{2}\log \det(2\pi \Psi^{-1}) - \frac{1}{2} \pmb y_i^\intercal \Psi \pmb y_i\right)\\
+\implies \frac{2}{n}l_{\vec {\pmb Y}} &= -\log \det(2\pi \Psi^{-1}) - \frac{1}{n}\sum_{i=1}^n \pmb y_i^\intercal \Psi \pmb y_i\\
+&= -m\log (2\pi) + \log \det \Psi - \frac{1}{n}\sum_{i=1}^n \pmb y_i^\intercal \Psi \pmb y_i\\
+\implies \frac{2}{n}l_{\vec {\pmb Y}} + m\log(2\pi) &= \log \det \Psi -  \frac{1}{n}\sum_{i=1}^n \Tr\left(\pmb y_i^\intercal \Psi \pmb y_i\right)\\
+&= \log \det \Psi -  \Tr\left(\frac{1}{n}\sum_{i=1}^n \Psi\pmb y_i^\intercal \pmb y_i\right)\\
+&= \log \det \Psi -  \Tr\left(\Psi \frac{1}{n}\sum_{i=1}^n \pmb y_i\pmb y_i^\intercal\right)\\
+&= \log \det \Psi -  \Tr\left(\Psi S_{\vec{\pmb Y}}\right)
+\end{align*}
+where $\displaystyle S_{\vec{\pmb Y}} = \frac{1}{n}\sum_{i=1}^n \pmb y_i \pmb y_i^\intercal$ is the sample covariance matrix. This is clearly symmetric positive semi-definite. The above calculation shows that $\displaystyle \underset{\Psi\in\cM}{\argmax}\set{l_{\vec{\pmb Y}} (\Psi)} = \underset{\Psi\in\cM}{\argmax}\set{\log \det \Psi -  \Tr\left(\Psi S_{\vec{\pmb Y}}\right)}$. Take $\ell_{\vec{\pmb Y}}(\Psi)\sett \log\det\Psi - \Tr(\Psi S_{\vec{\pmb Y}})$. Observe that $\ell_{\vec{\pmb Y}}(\Psi)$ is invariant under similarity of $\Psi$ and similarity of $S_{\vec{\pmb Y}}$. Further $\Psi,S_{\vec{\pmb Y}}$ are real symmetric matrices, hence have real eigenvalues and are diagonalizable. This means that if $\set{\lambda_i}_{i=1}^m \subseteq \R^{>0}$ and $\set{\mu_i}_{i=1}^m\subseteq \R^{\geq 0}$ are eigenvalues of $\Psi$ and $S_{\vec{\pmb Y}}$ respectively, then $\ell_{\vec{\pmb Y}}(\Psi) = \sum\log \lambda_i - \sum \lambda_i\mu_i$. Note that if $S_{\vec{\pmb Y}}$ is invertible, then 
+\begin{align*}
+\ell_{\vec{\pmb Y}}(\Psi) & = \log \det \Psi - \Tr\left(\Psi S_{\vec{\pmb Y}}\right)\\
+&= \log \det \Psi - \log \det S_{\vec{\pmb Y}}^{-1} + \log \det S_{\vec{\pmb Y}}^{-1} \\
+&\qquad \quad- \Tr\left(\Psi S_{\vec{\pmb Y}}\right) + \Tr \pmb 1_m - \Tr\left( S_{\vec{\pmb Y}}^{-1} S_{\vec{\pmb Y}}\right)\\
+&= \sum\log (\lambda_i\mu_i) + \log \det S_{\vec{\pmb Y}}^{-1} - \sum \lambda_i\mu_i + m - \Tr\left( S_{\vec{\pmb Y}}^{-1} S_{\vec{\pmb Y}}\right)\\
+&= \sum \left[\log (\lambda_i\mu_i) - \lambda_i\mu_i\right] + m + \ell_{\vec{\pmb Y}} \left(S_{\vec{\pmb Y}}^{-1}\right)\\
+&\leq \sum_{i=1}^m(-1) + m + \ell_{\vec{\pmb Y}} \left(S_{\vec{\pmb Y}}^{-1}\right) = \ell_{\vec{\pmb Y}} \left(S_{\vec{\pmb Y}}^{-1}\right)
+\end{align*}
+If $S_{\vec{\pmb Y}}$ is singular, assume WLOG $\mu_1=0$, then $ \ell_{\vec{\pmb Y}} \left(\Psi\right) = \log\lambda_1 + \sum\limits_{i\geq 2} \left(\log \lambda_i - \lambda_i\mu_i\right)$ diverges to $+\infty$ as $\lambda_1\to \infty$.
+
+
+
+\subsection{Gaussian group models}
+
+The \emph{Gaussian group model} given by a group $G \subseteq \GL(\R^n)$ is the multivariate Gaussian model comprising all densities of mean zero and concentration matrices given by $$\cM_G\sett \set{X^\intercal X: X\in G}.$$ The importance of such models is that finding an MLE is equivalent to an optimization problem. This is seen by the following calculation
+\begin{align}
+-\ell_{\vec{\pmb Y}}\left(X^\intercal X\right) &= \frac{1}{n}\sum\Tr \left(\left(X\pmb y_i\right)^\intercal X\pmb y_i\right) - \log\det \left(X^\intercal X\right)\\
+\label{norm_likelihood}&= \frac{1}{n} \sz{X\cdot \vec{\pmb Y}}_2^2 - \log(\det X)^2
+\end{align}
+So maximizing $\ell_{\vec{\pmb Y}}\left(X^\intercal X\right)$ is equivalent to minimizing $\frac{1}{n} \sz{X\vec{\pmb Y}}_2^2 - \log\det \left(X^\intercal X\right)$ which consists of minimizing norms. The exact statement is captured in the following theorem in \cite[Proposition 3.4]{mainpaper}:
+\begin{prop}
+Let $\vec{\pmb Y}\in V^n$ be a tuple of samples. If the group $G\subseteq \GL(V)$ is closed under non-zero scalar multiples, the supremum of the log-likelihood $\ell_{\vec{\pmb Y}}(\Psi)$ over $\cM_G$ is the double infimum $$-\inf_{\lambda>0}\left( \frac{\lambda}{n} \left( \inf_{H\in G_{\SL}^{\pm}} \sz{H\cdot \vec{\pmb Y}}^2 \right) - \dim (V) \log \lambda\right).$$
+The MLEs, if they exist, are the matrices $\displaystyle \frac{n \dim V}{\sz{H\cdot \vec{\pmb Y}}^2} H^\intercal H$, where $H$ minimizes $\sz{H\cdot \vec{\pmb Y}}$ under the action of $G_{\SL}^\pm$ on $V^n$.
+\end{prop}
+In the above, $G_{\SL}^\pm = \set{X\in G: \det X = \pm 1}$. 
+
+What the above proposition says is that $\ell_{\vec{\pmb Y}}\left(X^\intercal X\right)$ can be maximized in two steps:
+\begin{enumerate} 
+\item Minimize the norm $\sz{H\cdot \vec{\pmb Y}}^2$ over $H\in G_{\SL}^\pm$.
+\item Find a scalar $\mu\in \R$ so that $X\sett \mu H$ mimimizes $-\ell_{\vec{\pmb Y}}\left(X^\intercal X\right)$ in \cref{norm_likelihood}.
+\end{enumerate}
+
+\begin{proof}
+We want to minimize the function $f: G \to \R$ given by $$f(X) = \frac{1}{n} \sz{X\cdot \vec{\pmb Y}}_2^2 - \log\left(\det X\right)^2.$$
+Let $m=\dim V$. Observe that $f|_{G_{\SL}^\pm}$ determines $f$ completely. This is because for any $X\in G$, take $\displaystyle Z \sett \frac{1}{\mu_X} X$, where $\mu_X = \left(\abs{\det X}\right)^{\frac{1}{m}}\in \R_{>0}$. Clearly $\det Z = \frac{\det X}{\abs{\det X}} = \pm1$. Then \begin{align*}
+f(X) &= \frac{\mu_X^2}{n}\sz{Z\cdot \vec{\pmb Y}}_2^2 - \log\left( \left(\mu_X^m\det Z\right)^2\right)\\ 
+&= \frac{\mu_X^2}{n}\sz{Z\cdot \vec{\pmb Y}}_2^2 - 2m\log\mu_X\\
+&= \mu_X^2 f(Z) - 2m \log \mu_X
+\end{align*}
+Note that for $K>0$, the function $s \mapsto s K - \log s$ minimizes at $s=\frac{1}{K}$ giving a min value of $1+\log K$, the latter being an increasing function of $K$. Thus minimizing $f(X)$ is equivalent to first minimizing the norm in the orbit of $G_{\SL}^\pm$ and then minimizing the overall expression with the previous minima. In other words,
+$$\inf _{X\in G}f(X) = \inf_{\mu>0} \left( \mu^2 \cdot \inf_{Z\in G_{SL}^\pm} \sz{Z\cdot\vec{\pmb Y}}_2^2 - m\log \mu^2\right) .$$
+Replacing $\lambda = \mu^2$ gives the expression in the expression in the proposition. The MLE, if it exists, is given by the point $\hat X = \hat\mu \hat Z$, where $\hat Z$ minimizes $\sz{Z\cdot \vec{\pmb Y}}_2^2$ and $\displaystyle \hat \mu = \frac{\sqrt {mn}}{\sz{\hat Z\cdot \vec{\pmb Y}}_2}$, which corresponds to the input $\hat\Psi = \hat X^\intercal \hat X = \hat \mu^2 \hat Z^\intercal \hat Z$.
+\hfill\end{proof}
+
+
+\subsection{Transitive DAGs} 
+
+The relevance of transitive DAGs in the statistical context was introduced in \cite[\S5]{mainpaper}. We briefly introduce the relevant details here. Every DAG $\cG$ has a model associated to them given by $$\cM_{\cG} \sett  \set{(\pmb1-\Lambda)^\intercal\Omega^{-1}(\pmb1-\Lambda) : \Lambda, \Omega\in \R^{m_1\times m_i}, \Lambda_{ij}\neq 0\implies j\to i, \Omega \text{ diagonal and PD}}.$$ Note that taking $\Omega = \pmb 1, \Lambda=\pmb 0$ forces $\pmb 1\in \cM_{\cG}$. These matrices $\Psi\in \cM_{\cG}$ are to be thought of as concentration matrices, so they define a model $\set{f_{\Psi^{-1}}}$ (which is just a collection of probability densities) given by  $$f_{\Sigma}(y) = \frac{1}{\sqrt{\det(2\pi \Sigma)}} \exp\left(-\frac{1}{2}y^\intercal\Sigma^{-1}y\right)$$
+where $\Sigma=\Psi^{-1}$. 
+
+$\cG$ is said to be a \emph{transitive} DAG (TDAG) if $i\to k$ is an edge in $\cG$ whenever $i\to j, j\to k$ are. They turn out to be the `good' DAGs that help relate these models to Gaussian group models due to the following proposition in \cite{mainpaper}:
+
+\begin{theorem}\label{tdag_thm}
+$G\left(\cG\right)$ is a group iff $\cG$ is a TDAG. In such a case, $\cM_\cG = \cM_{G\left(\cG\right)}$.
+\end{theorem}
+
+\subsection{ss}
+
+
+\bibliographystyle{plain}
+\bibliography{refs.bib}
+
+
+\end{document}

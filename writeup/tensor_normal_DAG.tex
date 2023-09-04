@@ -1,0 +1,358 @@
+\input{pre.tex}
+\newcommand{\eto}{\stackrel{=}{\to}}
+\fontfamily{qcr}\selectfont 
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{refs.bib}
+\title{\vspace{-1cm}}
+\usepackage{quiver}
+\author{
+}
+\date{\vspace{-2cm}}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction and relevant background}
+
+\subsection{DAGs and their algebraic properties}
+
+
+
+\subsection{Tensoring Graphical models}
+
+Let $\cG_1, \cdots, \cG_n$ be DAGs of vertex sizes $m_1,\cdots, m_n$ respectively. Take $$\cM_{\mathcal G_i} \sett \set{(\pmb1-\Lambda)^\intercal\Omega^{-1}(\pmb1-\Lambda) : \Lambda, \Omega\in \R^{m_1\times m_i}, \Lambda_{ij}\neq 0\implies j\to i, \Omega \text{ diagonal and PD}}.$$ Note that taking $\Omega = \pmb 1, \Lambda=\pmb 0$ forces $\pmb 1\in \cM_{\cG_i}$.
+Look at the model (concentration matrices) $ M\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in \cM_{\cG_i}}$ where $\otimes$ stands for the Kronecker product for matrices (which is associative). Also for a group $G$ of matrices, define $\cM_{G} \sett \set{g^\intercal g: g\in G}$. \\The question we want to ask is: Is $M = \cM_{G}$ for some group $G$? To begin with, define the group for the tensor normal model for a collection of DAGs $\cG_i$ as $\displaystyle G\left(\cG_1, \cdots ,\cG_n\right)\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in G\left(\cG_i\right)} = \bigotimes_{i=1}^n G(\cG_i)$. Recall that the set of matrices corresponding to a single DAG $\cG$ is $$G\left(\cG\right) =  \set{X\in GL_{\abs{V(\cG)}}: X_{ij} = 0 \text{ for } i\neq j \text{ with } j\not \to i \text{ in }\cG}.$$
+
+\begin{lemma}\label{tensorgroup}
+$G(\cG_1,\cG_2)$ is a group iff both $\cG_i$ are TDAGs. If both $\cG_i$'s are TDAGs, the model $M = \set{\Psi_1\otimes\Psi_2: \Psi_i\in \cM_{\cG_i}}$  is exactly $\cM_{G\left(\cG_1,\cG_2\right)}$.
+\end{lemma}
+\pf{
+Suppose $\cG_1$ is not a TDAG. Then (after reordering), $3\to 2, 2\to 1$ but $3\not\to 1$ in $\cG_1$. Take the elementary matrix $E_{12}$ which has a $1$ on the diagonal entries and at the $(1,2)$ position, $0$ everywhere else. Also look at $E_{23}$. Consider $g=E_{12}\otimes \pmb 1, h = E_{23}\otimes\pmb 1$. Then $gh = E_{12}E_{23}\otimes \pmb 1$. This matrix has a $1$ in the $(1,2m_2+1)$ position. If this were in $G(\cG_1\otimes \cG_2)$ then there are matrices $X\in G(\cG_1), Y\in G(\cG_2)$ such that $x_{13}y_{11} = 1$. This is impossible because $3\not\to 1$ in $\cG_1$ whence $x_{13}=0$. So $g,h\in G(\cG_1\otimes \cG_2)$ but $gh\notin G(\cG_1\otimes \cG_2)$. A similar argument can be used if $\cG_2$ is not a TDAG.
+
+Suppose $\cG_i$ are both TDAG's. Then we know that $\cM_{\cG_i}$ are both groups given by $\cM_{\cG_i} = \cM_{G\left(\cG_i\right)}$ where $G_i\sett G\left(\cG_i\right) = \set{X\in GL_{m_i}: X_{pq} = 0 \text{ for } p\neq q \text{ with } q\not \to p \text{ in }\cG_i}$. So let $G= \set{X_1\otimes X_2 : X_i\in G_i}$. This is clearly a group. We will show that $M = \cM_{G}$ for this group $G$. Indeed, if $X\in M$ then $X = \Psi_1\otimes \Psi_2$ for some $\Psi_i\in \cM_{\cG_i}$. But then $\Psi_i = X_i^\intercal X_i$ for some $X_i\in G_i$. This means $X = \Psi_1\otimes \Psi_2 = (X_1^\intercal X_1)\otimes (X_2^\intercal X_2) = (X_1\otimes X_2)^\intercal(X_1\otimes X_2) \in \cM_G$ because $X_i\in G_i$. Note that these steps are reversible. This shows that $M=\cM_G$. 
+\hfill\qed}
+
+\section{(Trying to) Reduce to single DAG case}
+
+While thinking about questions on $G\left(\cG_1\right)\otimes G\left(\cG_2\right)$, I got `lazy' and tried to figure out the following question in order to make my life easy.
+\begin{qs}[answered]
+Given DAGs $\cG_1,\cG_2$, is there a DAG $\cG$ such that $G\left(\cG_1\right)\otimes G\left(\cG_2\right) = G\left(\cG\right)$? What if $\cG_1,\cG_2$ are transitive DAGs?
+\end{qs}
+
+Let's start thinking about what happens if the answer to the question is `YES' in the hope that the nonzero matrix components in the RHS set will give us the edges of $\cG$. For every $G\left(\cG\right)$, there is a distinguished element $\fM(\cG)$ where $\fM(\cG)_{ij} =\pmb 1_{j\eto i}$ where $\eto$ is defined later in \cref{eto}. This element gives all the edges of the DAG $-$ these edges precisely correspond to the off-diagonal entries. So tensoring $\fM(\cG_1)$ and $\fM(\cG_2)$ will give the off-edges of $\cG$. Denote $m_i=\abs{V(\cG_i)}$ and $e_i = \abs{E(\cG_i)}$.
+
+The construction has been made explicit in \cref{tensorDAG} and it can be seen that such $\cG$ does not exist. (Suggestion: look at the next section and come back to this argument). Let's just focus on the TDAG case now. It is clear that if such $\cG$ exists, then it has to have $m_1m_2$ vertices and at least $e_1e_2$ edges. There is a map $G\left(\cG_1\right)\otimes G\left(\cG_2\right) \to G\left(\cG\right)$, which is not surjective. That is because the dimension of the right-hand side group is $(m_1+e_1)(m_2+e_2)$ whereas the image has dimension $m_1+e_1+m_2+e_2-1$ which is much smaller for nontrivial DAGs $\cG_i$.
+
+This motivates the question 
+\begin{qs}
+Given TDAGs $\cG_1,\cG_2$, is there a TDAG $\cG$ such that $G\left(\cG_1\right)\otimes G\left(\cG_2\right) \cong G\left(\cG\right)$, where the isomorphism is in the category of groups? 
+\end{qs}
+
+\section{Tensor of two DAGs} \label{tensorDAG}
+
+\subsection{Algebraic definition}
+Start with a DAG $\cG$ and label the vertices so that $i\not\to j$ if $i<j$. In literature, this is referred to as a topological ordering, and every DAG has one. Consider the special matrix $\chi=\fM_m({\cG})$ given by $\chi_{ii}=1, \chi_{ij} = \pmb{1}_{j\to i}$ for $i\neq j$, that is, it's $1$ if $j\to i$ is an edge, and otherwise $0$. Note that this is an upper triangular matrix because $j<i\implies \chi_{ij} = \pmb{1}_{j\to i} = 0$. So $\det \chi = 1$. Further if $i\neq j$ and $j\not \to i$ in $\cG$ then $\chi_{ij}=0$. This shows that $\chi\in \cM_\cG$.
+
+Note, given an $m\times m$ upper triangular matrix $\chi$ with entries in $\set{0,1}$ and diagonal entries $1$, we can define a graph $\cG = \fG_m(\chi)$ whose vertex set is $\set{1,\cdots,m}$ and there is an edge $i\to j$ iff $\chi_{ji}=1$. $\cG$ has no directed cycles. Indeed, if there were a directed cycle $i_1\to i_2\to\cdots \to i_k\to i_1$, then by the upper triangularity of $\chi$  and construction of $\cG$, we get that $i_1 > i_2 > \cdots > i_k > i_1$ which is impossible. This means $\cG$ is a DAG.
+
+Thus we've established a $1-1$ association between the set of DAGs of size $m$ and the set of $m\times m$ upper triangular matrices with entries in $\set{0,1}$ and diagonal entries $1$.
+
+\[
+\set{\text{Topologically ordered DAGs of size }m}
+\;
+\begin{gathered}
+\overset{\fM_m}{\longrightarrow} \\[-2ex]
+\underset{\fG_m}{\longleftarrow}
+\end{gathered}
+\;
+\left\{
+  \begin{tabular}{@{} c @{}}
+  $m\times m$ upper triangular\\
+  matrices with entries in $\set{0,1}$\\
+  and diagonal entries $1$
+  \end{tabular}
+\right\}
+\]
+
+When the size $m$ of the DAG or the matrix is understood we suppress the subscript and simply write $\fG,\fM$. Now start with two topologically ordered DAGs $\cG_{1}, \cG_2$. Define $\cG_1\otimes \cG_2 \sett \fG(\fM(\cG_1)\otimes \fM(\cG_2))$ where $\otimes$ refers to the Kronecker product of matrices. Now one might ask the question: is $G(\cG_1)\otimes G(\cG_2) = G(\cG_1\otimes \cG_2)$? The answer is negative, though one of them is a subset of the other. The proof is presented quite elegantly with a combinatorial description.
+
+\subsection{A purely combinatorial description}
+
+Recall that the Kronecker product of matrices $A,B$ are given by $\displaystyle (A\otimes B)_{(i,j),(k,l)} = A_{ik}B_{jl}$. In our above description $\fM(\cG_1\otimes \cG_2) = \fM(\cG_1)\otimes \fM(\cG_2)$. The rows of $\fM(\cG_1\otimes \cG_2)$ are indexed by $(i_1,i_2)$ and its columns by $(j_1,j_2)$ where $i_k,j_k \in V(\cG_k)$. This suggests that the vertex set of $\cG_1\otimes \cG_2$ should be $V(\cG_1)\times V(\cG_2)$. To determine whether there is an edge $(j_1,j_2) \to (i_1,i_2) \iff \fM(\cG_1)_{i_1j_1} = \fM(\cG_2)_{i_2j_2} = 1 $ and $(i_1,i_2) \neq (j_1,j_2) \iff$ one of the following holds:
+\begin{itemize}
+\item $j_1\to i_1$ is an edge in $\sG_1$ and $j_2=i_2$ in $\sG_2$.
+\item $j_1 = i_1$ in $\sG_1$ and $j_2\to i_2$ is an edge  in $\sG_2$.
+\item $j_1 \to i_1$ is an edge in $\sG_1$ and $j_2\to i_2$ is an edge  in $\sG_2$.
+\end{itemize}
+
+We will introduce a notation. 
+\begin{defn}\label{eto}
+Let $\eto$ be the union of $=$ and $\to$ in a DAG $\cG$.
+\end{defn} In other words $i\eto j$ means that either $i=j$ or $i\to j$. Note that if $\cG$ is a transitive DAG then $i\eto j\eto k\implies i\eto k$. In this new notation, $(u,v)\to (u',v')$ is an edge in $\cG_1\otimes\cG_2$ iff $u \eto v$ in $\cG_1$ and $u'\eto v'$ in $\cG_2$ but $(u,v)\neq (u',v')$.
+
+With this notation and description we can more elegantly prove that
+
+\begin{lemma}
+$G(\cG_1)\otimes G(\cG_2) \subseteq G(\cG_1\otimes \cG_2)$
+\end{lemma}
+
+\begin{proof}
+Take any $\Psi_1\otimes \Psi_2\in G(\cG_1)\otimes G(\cG_2)$. Suppose $(i_1,i_2)\neq (j_1,j_2)$ are distinct vertices in $\cG_1\otimes \cG_2$ such that $(\Psi_1\otimes \Psi_2)_{(i_1,i_2),(j_1,j_2)} \neq 0$. But $0\neq (\Psi_1\otimes \Psi_2)_{(i_1,i_2),(j_1,j_2)} = (\Psi_1)_{i_1j_1} (\Psi_2)_{i_2j_2} \implies (\Psi_1)_{i_1j_1} \neq 0 \neq (\Psi_2)_{i_2j_2} \implies j_1\eto i_1$ and $j_2\eto i_2\implies (j_1,j_2) \to (i_1,i_2)\implies \Psi_1\otimes \Psi_2\in G(\cG_1\otimes \cG_2)$.
+\hfill\end{proof}
+
+\begin{rmk}
+Note that in the above lemma, it is not necessary that the collections of matrices described are groups. The inclusion is merely an inclusion of sets.
+\end{rmk}
+
+\begin{lemma}\label{tensortdag}
+$\cG_1$ and $\cG_2$ are TDAGs iff $\cG_1\otimes \cG_2$ is a TDAG.
+\end{lemma}
+
+\begin{proof}
+Say $\cG_1$ and $\cG_2$ are TDAGs. Say there are edges $(i_1,j_1)\to (i_2,j_2)\to (i_3,j_3)$ in $\cG_1\otimes \cG_2$. Then $i_1\eto i_2\eto i_3$ and $j_1\eto j_2\eto j_3$. Since $\cG_1,\cG_2$ are TDAGs, $i_1\eto i_3$ and $j_1\eto j_3$. This implies that $(i_1,j_1)\eto (i_3,j_3)$. We will show that these two are unequal. If $i_1=i_3$ then $i_1\to i_2$ can't be an edge (if it were, then we would have a cycle $i_1\to i_2\to i_3=i_1$), so $i_1=i_2=i_3$, and in this case we need $j_1\to j_2\to j_3$ to be real edges which gives the real edge $j_1\to j_3$.
+
+Conversely, assume $\cG_1\otimes \cG_2$ is a TDAG. Suppose $i_1\to i_2\to i_3$ are edges in $\cG_1$. Pick a vertex $j$ in $\cG_2$. Then there are edges $(i_1,j)\to (i_2,j)\to (i_3,j)$ in $\cG_1\otimes \cG_2$. Since $\cG_1\otimes \cG_2$ is a TDAG, we have an edge $(i_1,j)\to (i_3,j)$. By definition, $i_1\to i_3$ is an edge. Similar argument proves that $\cG_2$ is a TDAG.
+\hfill\end{proof}
+
+\begin{cor}
+$G(\cG_1)\otimes G(\cG_2)$ is a group iff $G(\cG_1\otimes \cG_2)$ is a group.
+\end{cor}
+\begin{proof}
+Use the fact that $G(\cG)$ is a group iff $\cG$ is a TDAG along with \cref{tensorgroup} and \cref{tensortdag}.
+\hfill\end{proof}
+
+
+
+%{\color{red}I suspect strongly that the answer is `yes'. I do see a proof which I sketch below.
+
+%Take $M=\Psi_1\otimes \Psi_2\in G(\cG_1)\otimes G(\cG_2)$ is such that $M_{ij}\neq 0$. Write $i=r_1m_2+r_2, j=c_1m_2+c_2$ using division algorithm. Note that this gives the entries $(r_i,c_i)$ in $\Psi_i$ that multiply to give the $(i,j)^{th}$ position in $M$. So there are edges $c_i\to r_i$ in $\cG_i$ which makes $\fM(\cG_i)_{r_i,c_i} = 1$. It follows by definition that $j\to i$ is an edge in $\cG_1\otimes \cG_2$. This proves one inclusion - the other inclusion is simply tracing back the steps.
+%}
+
+\newpage
+\begin{ex}
+\[\begin{tikzcd}
+	{\cG_2} \\
+	3 && 9 && 6 && 3 \\
+	2 && 8 && 5 && 2 \\
+	1 && 7 && 4 && 1 \\
+	\\
+	\bigotimes && 3 && 2 && 1 & {\cG_1}
+	\arrow[from=2-3, to=3-3]
+	\arrow[from=2-5, to=3-5]
+	\arrow[from=2-7, to=3-7]
+	\arrow[curve={height=12pt}, from=2-3, to=4-3]
+	\arrow[curve={height=-12pt}, from=2-5, to=4-5]
+	\arrow[curve={height=-12pt}, from=2-7, to=4-7]
+	\arrow[from=2-3, to=2-5]
+	\arrow[curve={height=-12pt}, from=2-3, to=2-7]
+	\arrow[from=2-3, to=3-5]
+	\arrow[from=2-3, to=3-7]
+	\arrow[curve={height=12pt}, from=2-3, to=4-7]
+	\arrow[from=2-3, to=4-5]
+	\arrow[curve={height=12pt}, from=3-3, to=3-7]
+	\arrow[from=3-3, to=3-5]
+	\arrow[from=4-3, to=4-5]
+	\arrow[curve={height=12pt}, from=4-3, to=4-7]
+	\arrow[from=6-3, to=6-5]
+	\arrow[curve={height=6pt}, from=6-3, to=6-7]
+	\arrow[from=2-1, to=3-1]
+	\arrow[curve={height=6pt}, from=2-1, to=4-1]
+\end{tikzcd}\]
+\end{ex}
+
+
+
+\begin{ex}
+\[\begin{tikzcd}
+	{\cG_2} \\
+	2 && 6 & 4 & 2 \\
+	1 && 5 & 3 & 1 \\
+	\\
+	\bigotimes && 3 & 2 & 1 & {\cG_1}
+	\arrow[from=2-3, to=3-3]
+	\arrow[from=2-4, to=3-4]
+	\arrow[from=2-5, to=3-5]
+	\arrow[from=2-3, to=2-4]
+	\arrow[curve={height=-6pt}, from=2-3, to=2-5]
+	\arrow[from=3-3, to=3-4]
+	\arrow[curve={height=6pt}, from=3-3, to=3-5]
+	\arrow[from=2-3, to=3-4]
+	\arrow[from=2-3, to=3-5]
+	\arrow[from=2-1, to=3-1]
+	\arrow[from=5-3, to=5-4]
+	\arrow[curve={height=6pt}, from=5-3, to=5-5]
+\end{tikzcd}\]
+\end{ex}
+\vspace{0.5in}
+
+While thinking about ``when are $G(\cG_1)\otimes G(\cG_2)$ Gaussian group models?'', I asked \begin{qs}Is it possible to find a group $G$ such that $\cM_{\cG} = \cM_G$ if $\cG$ is a DAG but not TDAG?\end{qs} That is, I was trying to characterize all DAGs such that their models are Gaussian group models. %I want to answer the question with a 'No'. Let's look at a simple example first.
+
+%\begin{ex}
+%Take the DAG $\cG = 1\to 2\to 3$. This is clearly not a TDAG because there is no edge $1\to 3$. First observe that any matrix $X\in \cM_\cG$ satisfies $X_{13}=0$. However, 
+%\end{ex}
+
+\subsection{Properties}
+
+Define the function $\delta(\cG) = \text{in-deg}(\cG)+1$ where $\text{in-deg}(\cG)$ means $\max\limits_{i\in I}\left(\#\set{\text{parents of }i}\right)$. It has been proven that $\text{mlt}(\cG) = \text{in-deg}(\cG)+1 = \delta(\cG)$. We will show that 
+
+\begin{lemma}
+$\delta(\cG_1\otimes \cG_2) = \delta(\cG_1)\delta(\cG_2)$.
+\end{lemma}
+\begin{proof}
+Denote by $p(v)$ the number of parents of vertex $v$. We will abuse notation and use the same $p$ for $\cG_1,\cG_2,\cG_1\otimes\cG_2$.\\
+It is not hard to see that $p((i,j)) = p(i) + p(j) + p(i)p(j) \implies p((i,j)) + 1 = (p(i)+1)(p(j)+1)$. This directly proves what we had wanted.
+\hfill\end{proof}
+
+It easily follows that $\text{mlt}(\cG_1\otimes \cG_2) = \delta(\cG_1\otimes \cG_2) = \delta(\cG_1)\delta(\cG_2) = \text{mlt}(\cG_1)\text{mlt}(\cG_2)$.
+
+Next, we can easily see that $\cG_1\otimes \cG_2$ always has an unshielded collider as long as each $\cG_t$ has an edge $i_t\to j_t$. This is because $(i_1,j_2) \rightarrow (j_1,j_2) \leftarrow (j_1,i_2)$ but no edge between $(i_1,j_2)$ and $(j_1,i_2)$. 
+
+\begin{cor}
+Let $\cG_1,\cdots,\cG_m$ be TDAGs and $\cG = \cG_1\otimes \cdots\otimes \cG_m$. 
+\begin{enumerate}[leftmargin=*]
+\item Consider the action of $\displaystyle \left(\prod G(\cG_i)_{\text{SL}}\right)^+$ on on tuples of $n\geq \prod\delta(\cG_i)$ samples. Then the null cone is not Zariski closed.
+\item The undirected graphical model obtained from $\cG$ is not a Gaussian group model.
+\end{enumerate}
+\end{cor}
+
+
+
+\section{A computational problem}
+
+We focus on the object $\cG_1\otimes \cG_2$ for this section. Given $\cG_1,\cG_2$ one can easily construct $\cG_1\otimes \cG_2$ in $\cO((m_1+e_1)(m_2 + e_2))$ time. We ask the inverse question:
+\begin{qs}Given a DAG $\cG$, is it possible to decompose it as $\cG_1\otimes \cG_2$ for nontrivial $\cG_i$?\end{qs} 
+
+This problem is clearly at least as hard as integer factoring. Indeed, if we could find such a decomposition, then clearly $\abs{V(\cG)} = \abs{V(\cG_1)}\cdot \abs{V(\cG_2)}$.
+
+Going they other way, suppose we are given a graph $\cG$ and we want to determine whether it is a tensor of two graphs. Find all nontrivial factors of $\abs{V(\cG)}$, call this set $S$. Do the following for each $d\in S$. Find all sub-blocks of size $d\times d$ with top-left corner $(1+id,1+jd)$ ($i,j\in \Z_{\geq0}$) in the matrix $\cM(\cG)$ where at least one entry is non-zero, and check if all such blocks are same. If one such $d$ is found, then $\cG$ can be decomposed as a tensor product.
+
+\section{An approximation problem}
+
+We want to ask how ``dense'' is the class of tensored DAGs. That is given two integers $m_1,m_2$ and a graph $G$ with $m_1m_2$ vertices, we want to solve the optimization problem $$\inf \{d\left(G, \cG_1\otimes \cG_2\right): \abs{V(\cG_i)} = m_i\}$$
+that is, finding the closest approximation of $G$ by tensor of two graphs of the given sizes. Of course, what the distance $d$ means must be made clear. 
+
+As a first attempt, one such distance could be defined to be $d(G,H) = \norm{A(G)-A(H)}{}$ for some choice of norm, where $A(\cdot)$ stands for the adjacency matrix. After playing around a bit, one immediately realizes that this depends on the labelling of vertices. But we would obviously want the metric to be invariant under graph isomorphisms. For example the Frobenius norm $d_F$ (under our definition) of the graphs \[\begin{tikzcd}
+	1 & 2 && 2 & 1
+	\arrow[from=1-4, to=1-5]
+	\arrow[from=1-1, to=1-2]
+\end{tikzcd}\]
+is $\sqrt 2$, but we would really want them to be $0$. So one way to correct this would be to redefine the metric as $$d_{\norm{\cdot}{}}(G,H) \sett \inf_{\substack{\text{relabellings}\\\text{of }G}}\norm{A(G)-A(H)}{}$$ which is the same as $$d_{\norm{\cdot}{}}(G,H) = \inf_{\substack{\text{permutation}\\\text{matrices }P}}\norm{PA(G)P^{-1}-A(H)}{}$$ where $\norm{\cdot}{}$ is a norm invariant under conjugation by permutation matrices, that is, $\norm{\cdot}{}$ is such that $\norm{PXP^{-1}}{} = \norm{X}{}$ for every matrix $X$ and every permutation matrix $P$. Such a norm $\norm{\cdot}{}:\R^{n\times n}\to \R_{\geq 0}$ will be referred to as \textit{symmetry invariant} (abbr.: SI). Moreover, we will call a norm \textit{strongly left-symmetry invariant} (\textit{strongly right-symmetry invariant} resp.) if $\norm{PX}{} = \norm{X}{}$ ($\norm{XP}{} = \norm{X}{}$ resp.) for all matrices $X$ and permutation matrices $P$. Abbreviate them as SLSI and SRSI respecively.
+Note that a norm which is both SRSI and SRSI is clearly SI.\\
+To get a large class of examples, we note that
+\begin{prop}
+$\norm{\cdot}{p}$ is SLSI and SRSI $\forall p\in [1,\infty]$, and thus SI.
+\end{prop}
+\begin{pf}
+It's well known that $\norm{XY}{p} \leq \norm{X}{p}\norm{Y}{p}$. Let $Q$ be a permutation matrix. It is known that $\norm Q p = 1$.\\ 
+Then $\norm{X}{p} \leq \norm{XQ}{p}\cdot\norm{Q^{-1}}{p} = \norm{XQ}{p} \leq \norm{XQQ^{-1}}{p} \norm{Q}{p} = \norm{X}{p}$. \\
+Similarly $\norm{X}{p} \leq \norm{Q^{-1}}{p}\cdot \norm{QX}{p} = \norm{QX}{p} \leq \norm{Q}{p}\cdot \norm{Q^{-1}QX}{p}  = \norm{X}{p}$.
+\hfill\qed\end{pf}
+
+\begin{qs}
+Find some non-SI matrix norm $\R^{n\times n}\to \R$.
+\end{qs}
+
+One might also note that the Frobenius norm, defined as $\displaystyle \norm{X}{F} = \sqrt{\sum\limits_{i,j}X_{i,j}^2}$, is also both SLSI and SRSI, hence SI. This means that all $d_x \sett d_{\norm{\cdot}{x}}$, for $x\in [1,\infty]\cup\set{F}$, are valid metrics on graphs. 
+
+Fix an SI norm ${\norm{\cdot}{}}$. We are yet to prove a few things. For example, it's not clear that $d_{\norm{\cdot}{}}$ is invariant under isomorphism of the graph in the second component. From this, one might feel that $$d'_{\norm{\cdot}{}}(G,H)\sett \inf_{\substack{\text{permutation}\\\text{matrices }P,Q}}\norm{PA(G)P^{-1}-QA(H)Q^{-1}}{}$$ `seems' to be more fit to our situation better as opposed to how the metric is really defined.
+
+To resolve these issues, observe that \begin{align*} 
+\norm{PA(G)P^{-1}-Q^{-1}A(H)Q}{} &= 
+\norm{Q^{-1}\left((QP)A(G)(QP)^{-1}-A(H)\right)Q}{} \\
+&= \norm{(QP)A(G)(QP)^{-1}-A(H)}{}.\end{align*} 
+This proves that if $H'$ is a graph isomorphic to $H$, that is $A(H') = Q^{-1}A(H)Q$ for some permutation matrix $Q$, then \begin{align*} d_{\norm{\cdot}{}}(G,H') &=
+\inf_{\substack{\text{permutation}\\\text{matrices }P}}\norm{PA(G)P^{-1}-Q^{-1}A(H)Q}{} \\
+&= \inf_{\substack{\text{permutation}\\\text{matrices }P}}\norm{(QP)A(G)(QP)^{-1}-A(H)}{} \\
+&= d_{\norm{\cdot}{}}(G,H).\end{align*}
+The same observation shows that $d_{\norm{\cdot}{}} = d_{\norm{\cdot}{}}'$ and also proves symmetry of $d_{\norm{\cdot}{}}$.
+
+\section{Continuous constrained optimization}
+
+The distance we're trying to find above involves minimizing a function as the inputs vary over a \textit{discrete} space. Explicitly, this is the space $\mathbb D_{m_1}\times \mathbb D_{m_2}$ where $\mathbb D_n$ is the set of all DAGs with $n$ vertices. It's a huge space and thus computationally expensive. Let's look at an example from high-school math which shows us how considering a continuous version of a problem reduces the search space.
+
+\begin{ex}
+We want to consider the problem of finding $\displaystyle \sup\limits_{n\in\N}n^{1/n}.$ Well, the search space here is not just `large', it's infinite. Maximizing $n^{1/n}$ is same as maximizing $\frac{\ln n}{n}$ and intuition tells us that $n$ dominates $\ln n$ for large $n$, so we could as well reduce the search space to something like $n\leq 100$. But that's not a good justification. Also this `dominating' feature is a more familiar feature of the functions $x$ and $\ln x$ for $x\in \R_{>0}$ rather than $x\in\N$. So let's just try to optimize the function $\frac{\ln x}{x}$ where the search space is $x\in\R_{>0}$. This is now a continuous problem. In fact this function is differentiable with derivative $\frac{1-\ln x}{x^2}$. Clearly this derivative is positive for $x<e$ and negative for $x>e$, and has a flat tangent at $x=e$, which is clearly our maxima. But the problem is not yet over. We wanted to optimize over $\N$, not $\R_{>0}$.  This is easy because we know that the function decreases as we go left from $e$ and also decreases as we go right from $e$. So we simply need to compare $2^{1/2}$ and $3^{1/3}$ because $2<e<3$. That gives our answer to be $n=3$ for which the supremum is $3^{1/3}$.
+\end{ex}
+
+Note that in the above example, we reduced the search space from $\N$ to $\set{2,3}$. Let's look at another example in one dimension higher.
+
+\begin{ex}
+We now want to find $\displaystyle \inf\limits_{(x,n)\in\R\times\N}x^2+x+n^2-n$ 
+%(x,y,x^2+x+y^2+\pi)
+
+\end{ex}
+
+
+\section{Tensoring coloured DAGs}
+
+\subsection{Introduction}
+
+A \emph{colouring of a DAG} assigns colours to the vertices and edges. A \emph{coloured DAG} is a tuple $(\cG,c)$, where $\cG = (I,E)$ is a DAG on vertices $I$ and edges $E$, and $c:I\cup E\to C$ is a colouring of the vertices and edges. Vertex $i \in I$ has colour $c(i) \in C$, and edge $j \to i$ has colour $c(ij) \in C$. We sometimes denote the vertex colour $c(i)$ by $c(ii)$, with no ambiguity because a DAG cannot have loops. Corresponding to such coloured DAGs, there are RDAGs (Restricted DAGs), where the model on $(\cG,c)$ is parameterized by $$A(\cG,c) = \set{X\in \GL_{\abs{I}} \st \substack{j\not\to i \implies X_{ij}=0 \text{ for } i\neq j\\c(ij) = c(kl)\implies X_{ij} = X_{kl}}}.$$
+
+We will only focus on ``good'' colourings, where this means .
+\begin{defn}
+A colouring $c$ of a directed graph $\cG$ is \emph{compatible}, if:
+\begin{enumerate}[label=(\alph*),itemsep=0pt]
+\item $c(I)\cap c(E) = \varnothing$
+\item If edges $j \to i$ and $l \to k$ have the same colour, then the child vertices $i$ and $k$ also have the same colour, i.e. $c(ij) = c(kl) \implies c(i) = c(k)$.
+\end{enumerate}
+\end{defn}
+
+It has been proven that 
+\begin{prop}
+Fix a coloured DAG $(\cG,c)$. The RDAG model on $(\cG,c)$ is equal to
+$\cM_{A(G,c)}$ if and only if the colouring $c$ is compatible.
+\end{prop}
+
+\subsection{Tensoring}
+
+Given two coloured DAGs $(\cG_1,c_1), (\cG_2,c_2)$ we already have a way to find an underlying graph $\cG_1\otimes \cG_2$ such they behave well wrt their specialized matrices, that is, $\fM(\cG_1\otimes \cG_2) = \fM(\cG_1)\otimes \fM(\cG_2)$. In the coloured case, we will associate a different specialized matrix to every coloured DAG where the entries will be formal (non-commuting) variables. 
+
+Fix a colored DAG $(\cG = (I,E),c)$. Let $C = c(I)\cup c(E)$. Our specialized matrix for this graph will be the matrix $\fM((\cG,c))$ whose $(i,j)^{\text{th}}$ entry is $\pmb 1_{j\to i}\cdot c(ji)$, where the $c(ji)$ are non-commuting variables (with possible equalities). So our matrix is really an element of $k\left<C\right>$. Now we define $(\cG,c) = (\cG_1,c_1)\otimes (\cG_2,c_2)$ to be such that $\cM((\cG,c)) = \cM(\cG_1,c_1)\otimes \cM(\cG_2,c_2)$. Combinatorially, $(\cG,c)$ is described as follows:
+\begin{itemize}[itemsep=0pt]
+\item Vertices of $\cG$ are $I(\cG)= I(\cG_1)\times I(\cG_2)$,
+\item There is an edge $(u,v)\to (u',v')$ iff $u\eto u', v\eto v'$ and $(u,v)\neq (u',v')$.
+\item The colour function is $c((u'v')(u,v)) = c_1(u'u)\cdot c_2(v'v)$.
+\end{itemize}
+Denote $\cG = \cG_1\otimes \cG_2, c=c_1\otimes c_2$.
+
+This is the analog of TDAGs for coloured DAGs because 
+\begin{prop}
+Let $(\cG_1,c_1), (\cG_2,c_2)$ be two nontrivial coloured DAGs with their colouring sets disjoint from each other. $c\sett c_1\otimes c_2$ is a compatible colouring for $\cG\sett \cG_1\otimes \cG_2$ iff $c_i$ is a compatible colouring for $\cG_i$, for each $i=1,2$.
+\end{prop}
+
+\begin{proof}
+Note $c((i_1,i_2)(j_1,j_2)) = c((k_1,k_2)(l_1,l_2)) \iff c_1(i_1j_1)c_2(i_2j_2) = c_1(k_1l_1)c_2(k_2l_2) \\\iff c_1(i_1j_1) = c_1(k_1l_1) \text{ and } c_2(i_2j_2) = c_2(k_2l_2)\implies c_t(i_t)=c_t(k_t)\forall t=1,2$.
+
+Suppose $c$ is a compatible colouring for $\cG$. Suppose $c_1(ij) = c_1(kl)$ in $\cG_1$. Let $y\to x$ be an edge in $\cG_2$. Then there are edges $(j,y)\to (i,x)$ and $(l,y)\to (k,x)$ in $\cG$. Taking $i_1=i, j_1=j, k_1=k, l_1=l, i_2=k_2=x, j_2=l_2=y$ gives $c((i,x)(j,y)) = c((k,x)(l,y)) \implies c((i,x)) = c((k,x))\implies c_1(i) = c_1(k)$. This shows that $c_1$ is compatible for $\cG_1$. A similar argument shows that $c_2$ is compatible for $\cG_2$.
+
+Suppose $c_t$ is compatible for $\cG_t$, for each $t=1,2$. Say there are edges (or vertices, if both coordinates equal) $(j_1,j_2)\eto (i_1,i_2)$ and $(l_1,l_2)\eto(k_1,k_2)$ which have the same colour. Using the above calculation, we get $c_t(i_t) = c_t(k_t)$ for $t=1,2$. This means $c((i_1,i_2)) = c((k_1,k_2))$.
+\hfill\end{proof}
+
+\begin{rmk}
+Similar questions can be asked for coloured DAGs, as we had asked for the non-coloured case.
+\end{rmk}
+\begin{rmk}[Places I see quivers arising (maybe forced thinking)]
+\begin{enumerate}[leftmargin=*]
+\item Let $\cG$ be a DAG such that for any vertices $i,j$ there is at most one path from $i$ to $j$. Take the transitive closure $\overline{\cG}$ of $\cG$, that is, if there is a path $i_1\to\cdots\to i_k$, then connect $i_1,i_k$ by an edge. Then $G\left(\overline{\cG}\right)$ is precisely the path algebra of the quiver $\cG$. \\
+I was thinking if one can "detransitivise" a TDAG $\cG$ (that is, find a quiver $Q$ such that there is at most one path between any two vertices and $\overline{Q} = \cG$) then we bring in quiver theory. But one can construct $\cG$ for which such $Q$ does not exist. In fact consider the following quiver $\cG$:
+\[\begin{tikzcd}
+	& 3 \\
+	1 && 4 \\
+	& 2
+	\arrow[from=2-1, to=1-2]
+	\arrow[from=1-2, to=2-3]
+	\arrow[from=2-1, to=3-2]
+	\arrow[from=3-2, to=2-3]
+	\arrow[from=2-1, to=2-3]
+\end{tikzcd}\]
+But one cannot find a $Q$ with the aforementioned property. One has to have $1\to 3, 3\to 4, 1\to 2$ and $2\to 4$ because absence of any of these in $Q$ would result in no path from the respective sources to the targets in $\overline Q$. But then this forces two paths $1\rightsquigarrow 4$, one through $2$ and $3$ each.
+\item While constructing the colour map for tensor of two coloured DAGs, we had to invoke the algebra $k\left<X_1,\cdots,X_n\right>$. This is the path algebra of the quiver with one vertex and $n$ loops on it.
+\end{enumerate}
+\end{rmk}
+
+
+
+
+\end{document}

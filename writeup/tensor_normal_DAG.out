@@ -1,0 +1,14 @@
+\BOOKMARK [1][-]{section.1}{Introduction and relevant background}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{DAGs and their algebraic properties}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Tensoring Graphical models}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{\(Trying to\) Reduce to single DAG case}{}% 4
+\BOOKMARK [1][-]{section.3}{Tensor of two DAGs}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Algebraic definition}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{A purely combinatorial description}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Properties}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{A computational problem}{}% 9
+\BOOKMARK [1][-]{section.5}{An approximation problem}{}% 10
+\BOOKMARK [1][-]{section.6}{Continuous constrained optimization}{}% 11
+\BOOKMARK [1][-]{section.7}{Tensoring coloured DAGs}{}% 12
+\BOOKMARK [2][-]{subsection.7.1}{Introduction}{section.7}% 13
+\BOOKMARK [2][-]{subsection.7.2}{Tensoring}{section.7}% 14
