@@ -22,7 +22,9 @@
 \subsection{Tensoring Graphical models}
 
 Let $\cG_1, \cdots, \cG_n$ be DAGs of vertex sizes $m_1,\cdots, m_n$ respectively. Take $$\cM_{\mathcal G_i} \sett \set{(\pmb1-\Lambda)^\intercal\Omega^{-1}(\pmb1-\Lambda) : \Lambda, \Omega\in \R^{m_1\times m_i}, \Lambda_{ij}\neq 0\implies j\to i, \Omega \text{ diagonal and PD}}.$$ Note that taking $\Omega = \pmb 1, \Lambda=\pmb 0$ forces $\pmb 1\in \cM_{\cG_i}$.
-Look at the model (concentration matrices) $ M\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in \cM_{\cG_i}}$ where $\otimes$ stands for the Kronecker product for matrices (which is associative). Also for a group $G$ of matrices, define $\cM_{G} \sett \set{g^\intercal g: g\in G}$. \\The question we want to ask is: Is $M = \cM_{G}$ for some group $G$? To begin with, define the group for the tensor normal model for a collection of DAGs $\cG_i$ as $\displaystyle G\left(\cG_1, \cdots ,\cG_n\right)\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in G\left(\cG_i\right)} = \bigotimes_{i=1}^n G(\cG_i)$. Recall that the set of matrices corresponding to a single DAG $\cG$ is $$G\left(\cG\right) =  \set{X\in GL_{\abs{V(\cG)}}: X_{ij} = 0 \text{ for } i\neq j \text{ with } j\not \to i \text{ in }\cG}.$$
+Look at the model (concentration matrices) $ M\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in \cM_{\cG_i}}$ where $\otimes$ stands for the Kronecker product for matrices (which is associative). Also for a group $G$ of matrices, define $\cM_{G} \sett \set{g^\intercal g: g\in G}$. \\The question we want to ask is: Is $M = \cM_{G}$ for some group $G$? Trying to answer this question is not easy, but thinking about it led me to writing up this article. 
+
+To begin with, define the group for the tensor normal model for a collection of DAGs $\cG_i$ as $\displaystyle G\left(\cG_1, \cdots ,\cG_n\right)\sett \set{\Psi_1\otimes\cdots\otimes\Psi_n: \Psi_i\in G\left(\cG_i\right)} = \bigotimes_{i=1}^n G(\cG_i)$. Recall that the set of matrices corresponding to a single DAG $\cG$ is $$G\left(\cG\right) =  \set{X\in GL_{\abs{V(\cG)}}: X_{ij} = 0 \text{ for } i\neq j \text{ with } j\not \to i \text{ in }\cG}.$$
 
 \begin{lemma}\label{tensorgroup}
 $G(\cG_1,\cG_2)$ is a group iff both $\cG_i$ are TDAGs. If both $\cG_i$'s are TDAGs, the model $M = \set{\Psi_1\otimes\Psi_2: \Psi_i\in \cM_{\cG_i}}$  is exactly $\cM_{G\left(\cG_1,\cG_2\right)}$.
@@ -269,19 +271,50 @@ The same observation shows that $d_{\norm{\cdot}{}} = d_{\norm{\cdot}{}}'$ and a
 
 \section{Continuous constrained optimization}
 
-The distance we're trying to find above involves minimizing a function as the inputs vary over a \textit{discrete} space. Explicitly, this is the space $\mathbb D_{m_1}\times \mathbb D_{m_2}$ where $\mathbb D_n$ is the set of all DAGs with $n$ vertices. It's a huge space and thus computationally expensive. Let's look at an example from high-school math which shows us how considering a continuous version of a problem reduces the search space.
+The distance we're trying to find above involves minimizing a function as the inputs vary over a \textit{discrete} space. Explicitly, this is the space $\mathbb D_{m_1}\times \mathbb D_{m_2}$ where $\mathbb D_n$ is the set of all DAGs with $n$ vertices. It's a huge space and thus computationally expensive. Let's look at examples which shows us how considering a continuous version of a problem reduces the search space.
 
-\begin{ex}
+\subsection{A high-school math problem}
+
 We want to consider the problem of finding $\displaystyle \sup\limits_{n\in\N}n^{1/n}.$ Well, the search space here is not just `large', it's infinite. Maximizing $n^{1/n}$ is same as maximizing $\frac{\ln n}{n}$ and intuition tells us that $n$ dominates $\ln n$ for large $n$, so we could as well reduce the search space to something like $n\leq 100$. But that's not a good justification. Also this `dominating' feature is a more familiar feature of the functions $x$ and $\ln x$ for $x\in \R_{>0}$ rather than $x\in\N$. So let's just try to optimize the function $\frac{\ln x}{x}$ where the search space is $x\in\R_{>0}$. This is now a continuous problem. In fact this function is differentiable with derivative $\frac{1-\ln x}{x^2}$. Clearly this derivative is positive for $x<e$ and negative for $x>e$, and has a flat tangent at $x=e$, which is clearly our maxima. But the problem is not yet over. We wanted to optimize over $\N$, not $\R_{>0}$.  This is easy because we know that the function decreases as we go left from $e$ and also decreases as we go right from $e$. So we simply need to compare $2^{1/2}$ and $3^{1/3}$ because $2<e<3$. That gives our answer to be $n=3$ for which the supremum is $3^{1/3}$.
-\end{ex}
 
-Note that in the above example, we reduced the search space from $\N$ to $\set{2,3}$. Let's look at another example in one dimension higher.
 
-\begin{ex}
-We now want to find $\displaystyle \inf\limits_{(x,n)\in\R\times\N}x^2+x+n^2-n$ 
-%(x,y,x^2+x+y^2+\pi)
+Note that in the above example, we reduced the search space from $\N$ to $\set{2,3}$.
 
-\end{ex}
+\subsection{A max-flow problem}
+Consider a directed graph $G=(V,E)$ with $n$ vertices and $m$ edges. Fix two distinct arbitrary vertices $s\neq t\in V$ which are to be thought of as \textit{source} and \textit{target} vertices respectively. Additionally $s,t$ satisfy that there is no edge going into $s$ and no edge going out of $t$. An $s-t$ flow is an assignment $\pmb f:E\to \R$ of weights to each edge satisfying $\abs{\pmb f_{e}}\leq 1\forall e\in E$ (that is, we set \textit{capacity} of each edge to be $1$) and Kirchoff's law: $\displaystyle \sum_{\set{j\in V:j\to v}}\pmb f_{j\to v} = \sum_{\set{j\in V:v\to j}}\pmb f_{v\to j}$ for each $v\in V\smallsetminus\set{s,t}$, that is, the incoming flow is equal to outgoing flow at each vertex $i$. 
+Consider its incidence matrix $H\in M_{n\times m}(\R)$ where the $(i,e)^{\text{th}}$ entry is $1$ if $e$ goes into $i$, $-1$ if $e$ comes out of $i$ and $0$ otherwise. One can think of $\pmb f$ as an element of $\R^m\cong \R^E$, so that the capacity condition is equivalent to $\norm{\pmb f}{\infty}\leq 1$ and Kirchoff's law is equivalent to $\inner{\pmb e_i}{H\pmb f}=0\forall i$ where $\pmb e_i\in \R^n$ is the $i^{\text{th}}$ standard basis vector for $1\leq i\leq n$. The problem is to maximize $\displaystyle \sum_{\set{j\in V:s\to j}}\pmb f_{s\to j} = \inner{e_s}{H\pmb f} = -\inner{e_t}{H\pmb f}$, the flow out of $s$, given the constraints (capacity constraint and Kirchoff's law). On a side note, a special case of this problem is the problem of finding a perfect matching in a bipartite graph.
+
+Suppose we are given a flow value $F$, note that an $s-t$ flow with flow value $F$ (that is, the total flow coming out of $s$) looks like a vector $\pmb f\in \R^E$ satisfying $H\pmb f = F(\pmb e_s-\pmb e_t)$. For the flow to respect the capacity, we additionally need $\abs{\pmb f_i}\leq 1$. So a \textit{feasible flow} is a vector in the intersection of the two sets $X_F \sett \set{\pmb f\in \R^E: H\pmb f = F(\pmb e_s-\pmb e_t)}$ and $B_\infty\sett B_\infty(0,1) = \set{\pmb f\in \R^E: \norm{\pmb f}{\infty}\leq 1}$. It is easy to see that both of these are convex sets. Indeed $B_\infty$ is a unit ball and a polytope, and if $\pmb f,\pm f'\in X_F$ then any convex linear combination (say weights $\lambda,\mu$) satisfy $H(\lambda \pmb f+\mu\pmb f') = (\lambda+\mu)F(\pmb e_s-\pmb e_t) = F(\pmb e_s-\pmb e_t)$ whence $\lambda \pmb f+\mu\pmb f'\in X_F$. Now this problem about finding the intersection of two sets (embedded in Euclidean space) can be converted into a convex optimization problem. Let's discuss this a bit in general framework.
+
+Let $S,T\subseteq \R^d$ be convex and closed. We want to determine a point in $S\cap T$, or whether it's empty. A different way to think about this is to find a point $\pmb x\in S$ that minimizes $\displaystyle d(\pmb x,T) = \inf_{\pmb y\in T}d(\pmb x,\pmb y)$. 
+
+Now, we want to actually find points for which this minimum distance is attained, that is, we want existence of $\pmb x\in S,\pmb y\in T$ so that the above minimum is $d(\pmb x,\pmb y)$. So why does that not work? Indeed, $S = \R\times \set{0}, T = \set{(u,v)\in \R^2: v\geq 1/u, u>0}$ is an example of closed convex sets such $d(S,T) = 0$ but $S\cap T = \varphi$. However, if one of $S,T$ is compact, we can guarantee that $d(S,T)=0\implies S\cap T \neq \varphi$. Let's prove this in the following lemma:
+
+\begin{lemma}
+Let $X$ be a metric space and $A,B\subseteq X$ be disjoint subsets such that $A$ is closed and $B$ is compact. Then $\displaystyle d(A,B) = \inf_{x\in A,y\in B} d(x,y) >0$.
+\end{lemma}
+
+\pf{
+For the sake of contradiction, assume there are sequences $(x_n)$ in $A$ and $(y_n)$ in $B$ such that $\displaystyle \lim_{n\to \infty}d(x_n,y_n) = 0$. $B$ is compact so $(y_n)$ has a convergent subsequence $(y_{k_n})$, and say it converges to $y\in B$. Then $d(x_{k_n},y) \leq d(x_{k_n},y_{k_n}) + d(y_{k_n},y)$ and both of the terms on the RHS can be made arbitrarily small. So $x_{k_n}\longrightarrow y$, whence $y$ is a limit point of the sequence $(x_{k_n})$. But this is a sequence in $A$, whence $y\in A$. So $y\in A\cap B$, a contradiction.
+\hfill\qed
+}
+
+
+So we now also assume that $T$ is compact. This guarantees that the minimum distance is actually attained, and not merely an infimum.
+
+So the problem becomes 
+\begin{align*}
+\min d(\pmb x,T)^2\\
+\text{subject to } \pmb x \in S.
+\end{align*}
+We are using the squared (Euclidean) distance because it's smooth.
+The fact that $S,T$ are convex sets and $d(\pmb x,T)^2$ is a convex function makes this problem a convex program. We could, as well, exchange the roles of $S,T$ and have the problem 
+\begin{align*}
+\min d(\pmb x,S)^2\\
+\text{subject to } \pmb x \in T.
+\end{align*}
+
+
 
 
 \section{Tensoring coloured DAGs}
