@@ -290,7 +290,7 @@ Let $S,T\subseteq \R^d$ be convex and closed. We want to determine a point in $S
 Now, we want to actually find points for which this minimum distance is attained, that is, we want existence of $\pmb x\in S,\pmb y\in T$ so that the above minimum is $d(\pmb x,\pmb y)$. So why does that not work? Indeed, $S = \R\times \set{0}, T = \set{(u,v)\in \R^2: v\geq 1/u, u>0}$ is an example of closed convex sets such $d(S,T) = 0$ but $S\cap T = \varphi$. However, if one of $S,T$ is compact, we can guarantee that $d(S,T)=0\implies S\cap T \neq \varphi$. Let's prove this in the following lemma:
 
 \begin{lemma}
-Let $X$ be a metric space and $A,B\subseteq X$ be disjoint subsets such that $A$ is closed and $B$ is compact. Then $\displaystyle d(A,B) = \inf_{x\in A,y\in B} d(x,y) >0$.
+Let $X$ be a metric space, with metric $d$, and $A,B\subseteq X$ be disjoint subsets such that $A$ is closed and $B$ is compact. Then $\displaystyle d(A,B) = \inf_{x\in A,y\in B} d(x,y) >0$.
 \end{lemma}
 
 \pf{
