@@ -1,8 +1,17 @@
 \input{writeup/pre.tex}
 \newcommand{\eto}{\stackrel{=}{\to}}
 \fontfamily{qcr}\selectfont 
-\usepackage[backend=bibtex]{biblatex}
-\addbibresource{refs.bib}
+%\usepackage[backend=bibtex]{biblatex}
+\usepackage[
+backend=biber,
+style=alphabetic,%firstinits,
+citestyle=ieee-alphabetic,
+%natbib=true,
+%uniquelist=false,
+maxnames=10,
+sorting=ynt
+]{biblatex}
+\addbibresource{writeup/article/refs.bib}
 \title{\vspace{-1cm}}
 \usepackage{quiver}
 %\author{}
@@ -233,12 +242,12 @@ Going they other way, suppose we are given a graph $\cG$ and we want to determin
 We want to ask how ``dense'' is the class of tensored DAGs. That is given two integers $m_1,m_2$ and a graph $G$ with $m_1m_2$ vertices, we want to solve the optimization problem $$\inf \{d\left(G, \cG_1\otimes \cG_2\right): \abs{V(\cG_i)} = m_i\}$$
 that is, finding the closest approximation of $G$ by tensor of two graphs of the given sizes. Of course, what the distance $d$ means must be made clear. 
 
-As a first attempt, one such distance could be defined to be $d(G,H) = \norm{A(G)-A(H)}{}$ for some choice of norm, where $A(\cdot)$ stands for the adjacency matrix. After playing around a bit, one immediately realizes that this depends on the labelling of vertices. But we would obviously want the metric to be invariant under graph isomorphisms. For example the Frobenius norm $d_F$ (under our definition) of the graphs \[\begin{tikzcd}
+As a first attempt, one such distance could be defined to be $d(G,H) = \norm{A(G)-A(H)}{}$ for some choice of norm, where $A(\cdot)$ stands for the adjacency matrix. After playing around a bit, one immediately realizes that this depends on the labelling of vertices. Someone working in causal inference would want the metric to be invariant under Markov equivalence. A pure mathematician would obviously want it to invariant under graph isomorphism. For example the Frobenius norm $d_F$ (under our definition) of the graphs \[\begin{tikzcd}
 	1 & 2 && 2 & 1
 	\arrow[from=1-4, to=1-5]
 	\arrow[from=1-1, to=1-2]
 \end{tikzcd}\]
-is $\sqrt 2$, but we would really want them to be $0$. So one way to correct this would be to redefine the metric as $$d_{\norm{\cdot}{}}(G,H) \sett \inf_{\substack{\text{relabellings}\\\text{of }G}}\norm{A(G)-A(H)}{}$$ which is the same as $$d_{\norm{\cdot}{}}(G,H) = \inf_{\substack{\text{permutation}\\\text{matrices }P}}\norm{PA(G)P^{-1}-A(H)}{}$$ where $\norm{\cdot}{}$ is a norm invariant under conjugation by permutation matrices, that is, $\norm{\cdot}{}$ is such that $\norm{PXP^{-1}}{} = \norm{X}{}$ for every matrix $X$ and every permutation matrix $P$. Such a norm $\norm{\cdot}{}:\R^{n\times n}\to \R_{\geq 0}$ will be referred to as \textit{symmetry invariant} (abbr.: SI). Moreover, we will call a norm \textit{strongly left-symmetry invariant} (\textit{strongly right-symmetry invariant} resp.) if $\norm{PX}{} = \norm{X}{}$ ($\norm{XP}{} = \norm{X}{}$ resp.) for all matrices $X$ and permutation matrices $P$. Abbreviate them as SLSI and SRSI respecively.
+is $\sqrt 2$, but a mathematician would want it to be $0$. We help the pure mathematician first. One way to correct this would be to redefine the metric as $$d_{\norm{\cdot}{}}(G,H) \sett \inf_{\substack{\text{relabellings}\\\text{of }G}}\norm{A(G)-A(H)}{}$$ which is the same as $$d_{\norm{\cdot}{}}(G,H) = \inf_{\substack{\text{permutation}\\\text{matrices }P}}\norm{PA(G)P^{-1}-A(H)}{}$$ where $\norm{\cdot}{}$ is a norm invariant under conjugation by permutation matrices, that is, $\norm{\cdot}{}$ is such that $\norm{PXP^{-1}}{} = \norm{X}{}$ for every matrix $X$ and every permutation matrix $P$. Such a norm $\norm{\cdot}{}:\R^{n\times n}\to \R_{\geq 0}$ will be referred to as \textit{symmetry invariant} (abbr.: SI). Moreover, we will call a norm \textit{strongly left-symmetry invariant} (\textit{strongly right-symmetry invariant} resp.) if $\norm{PX}{} = \norm{X}{}$ ($\norm{XP}{} = \norm{X}{}$ resp.) for all matrices $X$ and permutation matrices $P$. Abbreviate them as SLSI and SRSI respecively.
 Note that a norm which is both SRSI and SRSI is clearly SI.\\
 To get a large class of examples, we note that
 \begin{prop}
@@ -383,8 +392,12 @@ But one cannot find a $Q$ with the aforementioned property. One has to have $1\t
 \item While constructing the colour map for tensor of two coloured DAGs, we had to invoke the algebra $k\left<X_1,\cdots,X_n\right>$. This is the path algebra of the quiver with one vertex and $n$ loops on it.
 \end{enumerate}
 \end{rmk}
+\nocite{mainpaper}
+\printbibliography
 
-
-
+%\bibliographystyle{plain}
+%\bibliography{writeup/article/refs.bib}
+\nocite{dagsnotears}
+\nocite{symmetriesDAG}
 
 \end{document}
